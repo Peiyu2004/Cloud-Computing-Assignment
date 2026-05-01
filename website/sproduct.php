@@ -171,6 +171,17 @@ if (isset($_GET['nw'])) {
     $img = $row['img'];
     $brand = $row['brand'];
 
+    if (strpos($img, 'http') !== false) {
+        // 1. If it's already a full URL (prevents the double URL error)
+        $display_img = $img;
+    } elseif (strpos($img, 'resized/') !== false || strpos($img, 'uploads/') !== false) {
+        // 2. If it's a relative S3 key, prepend ONLY the S3 base URL
+        $display_img = $s3_base . $img;
+    } else {
+        // 3. If it's a legacy local filename, prepend your local folder
+        $display_img = "product_images/" . $img;
+    }
+
     $aid = $_SESSION['aid'];
     $query = "select * from wishlist where aid = $aid and pid = $pid";
     $result = mysqli_query($con, $query);
@@ -180,7 +191,7 @@ if (isset($_GET['nw'])) {
     echo "
       <section id='prodetails' class='section-p1'>
         <div class='single-pro-image'>
-          <img src='" . $s3_base . "product_images/$img' width='100%' id='MainImg' alt=' ' />
+          <img src='$display_img' width='100%' id='MainImg' alt=' ' />
         </div>
         <div class='single-pro-details'>
         

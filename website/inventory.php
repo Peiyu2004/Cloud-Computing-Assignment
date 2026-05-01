@@ -38,7 +38,7 @@ if (isset($_POST['ins'])) {
         // $image = $result['ObjectURL'];
         $originalUrl = $result['ObjectURL'];
         // convert to resized path
-        $image = str_replace("uploads/", "resized/", $originalUrl);
+        $image = str_replace("uploads/", "resized/", $key);
     } 
     catch (Exception $e) {
         die("Upload failed: " . $e->getMessage());
@@ -105,7 +105,7 @@ if (isset($_POST['submitt'])) {
         $originalUrl = $result['ObjectURL'];
 
         // convert to resized
-        $image = str_replace("uploads/", "resized/", $originalUrl);
+        $image = str_replace("uploads/", "resized/", $key);
 
     } catch (Exception $e) {
         die("Upload failed: " . $e->getMessage());
@@ -562,19 +562,16 @@ if (isset($_GET['odd'])) {
 							$img = $row['img'];
 							$brand = $row['brand'];
 
-                            // 1. Check if it is an S3 URL (contains 'amazonaws.com')
-                            if (strpos($img, 'amazonaws.com') !== false) {
-                                // Only replace if 'uploads/' exists in the S3 URL
-                                if (strpos($img, 'uploads/') !== false) {
-                                    $img = str_replace("uploads/", "resized/", $img);
-                                }
-                            } 
-                            // 2. If it's a local image and doesn't have a full URL, 
-                            // make sure the path points to your local folder correctly
-                            elseif (!empty($img) && strpos($img, 'http') === false) {
-                                // If your local images are in a folder called 'product_images/'
-                                // and the DB only stores 'photo.jpg', uncomment the line below:
-                                $img = "product_images/" . $img;
+
+                            if (strpos($img, 'http') !== false) {
+                                // 1. If it's already a full URL (handles your old/existing data)
+                                $display_img = $img;
+                            } elseif (strpos($img, 'resized/') !== false) {
+                                // 2. If it's a new S3 relative path, prepend the S3 base URL
+                                $display_img = $s3_base . $img; 
+                            } else {
+                                // 3. If it's a local filename, prepend your local folder
+                                $display_img = "product_images/" . $img;
                             }
 
 							echo "<tr>
@@ -583,7 +580,7 @@ if (isset($_GET['odd'])) {
 										<td>$cat</td>
 										<td>$price</td>
 										<td>$qty</td>
-										<td><img src='$img' alt='' /></td>
+										<td><img src='$display_img' alt='' /></td>
 										<td>$brand</td>
 									
 										<td><a href ='inventory.php?pid=$pid' class='insert-btn'>Delete</button></td>

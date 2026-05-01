@@ -153,6 +153,15 @@ include("include/s3_config.php");
             $img = $row['img'];
             $brand = $row['brand'];
 
+            // if (strpos($img, 'uploads/') !== false) {
+            //     $img = str_replace("uploads/", "resized/", $img);
+            // }
+
+            // If it's a local image (no full URL), prepend the folder
+            if (!empty($img) && strpos($img, 'http') === false) {
+                $img = "product_images/" . $img;
+            }
+            // S3 Resizing logic
             if (strpos($img, 'uploads/') !== false) {
                 $img = str_replace("uploads/", "resized/", $img);
             }
