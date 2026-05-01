@@ -1,5 +1,7 @@
 <?php
 session_start();
+include("include/connect.php");
+include("include/s3_config.php");
 
 if (isset($_POST['submit'])) {
   include("include/connect.php");
@@ -12,7 +14,7 @@ if (isset($_POST['submit'])) {
     exit();
   }
 
-  $query = "select * from `cart`  where aid = $aid and pid = $pid";
+  $query = "select * from `cart` where aid = $aid and pid = $pid";
 
   $result = mysqli_query($con, $query);
   $row = mysqli_fetch_assoc($result);
@@ -40,7 +42,7 @@ if (isset($_GET['w'])) {
   }
   $pid = $_GET['w'];
 
-  $query = "INSERT INTO `WISHLIST` (aid, pid) values ($aid, $pid)";
+  $query = "INSERT INTO `wishlist` (aid, pid) values ($aid, $pid)";
 
   $result = mysqli_query($con, $query);
   header("Location: sproduct.php?pid=$pid");
@@ -51,7 +53,7 @@ if (isset($_GET['nw'])) {
   $aid = $_SESSION['aid'];
   $pid = $_GET['nw'];
 
-  $query = "DELETE from `WISHLIST` where aid = $aid and pid = $pid";
+  $query = "DELETE from `wishlist` where aid = $aid and pid = $pid";
 
   $result = mysqli_query($con, $query);
   header("Location: sproduct.php?pid=$pid");
@@ -72,7 +74,7 @@ if (isset($_GET['nw'])) {
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="<?php echo $s3_base; ?>style.css" />
 
   <style>
     .heart {
@@ -116,7 +118,7 @@ if (isset($_GET['nw'])) {
 
 <body>
   <section id="header">
-    <a href="index.php"><img src="img/logo.png" class="logo" alt="" /></a>
+    <a href="index.php"><img src="<?php echo $s3_base; ?>img/logo.png" class="logo" alt="" /></a>
 
     <div>
       <ul id="navbar">
@@ -154,7 +156,7 @@ if (isset($_GET['nw'])) {
 
   if (isset($_GET['pid'])) {
     $pid = $_GET['pid'];
-    $query = "SELECT* FROM PRODUCTS WHERE pid = $pid";
+    $query = "SELECT* FROM products WHERE pid = $pid";
 
     $result = mysqli_query($con, $query);
     $row = mysqli_fetch_assoc($result);
@@ -178,7 +180,7 @@ if (isset($_GET['nw'])) {
     echo "
       <section id='prodetails' class='section-p1'>
         <div class='single-pro-image'>
-          <img src='product_images/$img' width='100%' id='MainImg' alt=' ' />
+          <img src='" . $s3_base . "product_images/$img' width='100%' id='MainImg' alt=' ' />
         </div>
         <div class='single-pro-details'>
         
@@ -207,7 +209,7 @@ if (isset($_GET['nw'])) {
   echo "</div></section>";
 }
 
-$query = "select * from reviews join orders on reviews.oid = orders.oid join accounts on orders.aid = accounts.aid where reviews.pid = $pid";
+$query = "select * from `reviews` join orders on reviews.oid = orders.oid join accounts on orders.aid = accounts.aid where reviews.pid = $pid";
 $result = mysqli_query($con, $query);
 
 $row = mysqli_fetch_assoc($result);
@@ -275,7 +277,7 @@ echo "</tbody></table></div></div>";
     </div>
     <div class="col install">
       <p>Secured Payment Gateways</p>
-      <img src="img/pay/pay.png" />
+      <img src="<?php echo $s3_base; ?>img/pay/pay.png" />
     </div>
     <div class="copyright">
       <p>2021. byteBazaar. HTML CSS </p>
@@ -299,7 +301,7 @@ echo "</tbody></table></div></div>";
       MainImg.src = smallimg[3].src;
     };
   </script>
-  <script src="script.js"></script>
+  <script src="<?php echo $s3_base; ?>script.js"></script>
 </body>
 
 </html>

@@ -1,36 +1,32 @@
 <?php
 session_start();
-
 include("include/connect.php");
+include("include/s3_config.php");
 
 if (isset($_POST['submit'])) {
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+  $username = $_POST['username'];
+  $password = $_POST['password'];
 
-    $query = "SELECT * FROM accounts WHERE username='$username' AND password='$password'";
+  if ($username == "admin1") {
 
+    $query = "select * from accounts where username='$username' and password='$password'";
     $result = mysqli_query($con, $query);
 
+
     if (mysqli_num_rows($result) > 0) {
-
-        $row = mysqli_fetch_assoc($result);
-
+      echo "<script> window.open('inventory.php', '_blank') </script>";
 
 
-        $_SESSION['aid'] = $row['aid'];
-
-
-
-        header("Location: profile.php");
-        exit();
-
+    } else {
+      echo "<script> alert('Wrong credentials') </script>";
     }
-    else
-    {
-         echo "<script> alert('Wrong credentials') </script>";
-    }
+
+  } else {
+    echo "<script> alert('Wrong credentials') </script>";
+  }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -44,13 +40,13 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="<?php echo $s3_base; ?>style.css" />
 
 </head>
 
 <body>
     <section id="header">
-        <a href="#"><img src="img/logo.png" class="logo" alt="" /></a>
+        <a href="index.php"><img src="<?php echo $s3_base; ?>img/logo.png" class="logo" alt="" /></a>
 
         <div>
             <ul id="navbar">
@@ -58,9 +54,19 @@ if (isset($_POST['submit'])) {
                 <li><a href="shop.php">Shop</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="contact.php">Contact</a></li>
-                <li><a class="active" href="login.php">login</a></li>
-                <li><a href="signup.php">SignUp</a></li>
-                <li><a href="admin.php">Admin</a></li>
+
+                <?php
+
+        if ($_SESSION['aid'] < 0) {
+          echo "   <li><a href='login.php'>login</a></li>
+            <li><a href='signup.php'>SignUp</a></li>
+            ";
+        } else {
+          echo "   <li><a href='profile.php'>profile</a></li>
+          ";
+        }
+        ?>
+                <li><a class="active" href="admin.php">Admin</a></li>
                 <li id="lg-bag">
                     <a href="cart.php"><i class="far fa-shopping-bag"></i></a>
                 </li>
@@ -81,10 +87,6 @@ if (isset($_POST['submit'])) {
         <button type="submit" class="btn" name="submit">login</button>
 
     </form>
-
-    <div class="sign">
-        <a href="signup.php" class="signn">Do not have an account?</a>
-    </div>
 
 
     <footer class="section-p1">
@@ -110,23 +112,14 @@ if (isset($_POST['submit'])) {
         </div>
         <div class="col install">
             <p>Secured Payment Gateways</p>
-            <img src="img/pay/pay.png" />
+            <img src="<?php echo $s3_base; ?>img/pay/pay.png" />
         </div>
         <div class="copyright">
             <p>2021. byteBazaar. HTML CSS </p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="<?php echo $s3_base; ?>script.js"></script>
 </body>
 
 </html>
-
-<script>
-window.addEventListener("unload", function() {
-  // Call a PHP script to log out the user
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "logout.php", false);
-  xhr.send();
-});
-</script>

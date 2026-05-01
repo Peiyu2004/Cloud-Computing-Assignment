@@ -149,7 +149,7 @@ if (isset($_GET['odd'])) {
 
 <head>
     <title>Ecommerce Inventory Management</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?php echo $s3_base; ?>style.css">
     <style>
     #d1 {
 
@@ -472,7 +472,7 @@ if (isset($_GET['odd'])) {
                     <?php
 					if (isset($_GET['pidd'])) {
 						$id = $_GET['pidd'];
-						$query = "select * FROM products WHERE pid = $id";
+						$query = "select * FROM `products` WHERE pid = $id";
 
 						$result = mysqli_query($con, $query);
 						$row = mysqli_fetch_assoc($result);

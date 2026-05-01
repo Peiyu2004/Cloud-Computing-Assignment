@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include("include/s3_config.php");
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +14,7 @@ session_start();
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="<?php echo $s3_base; ?>style.css" />
 
     <style>
     .search-container {
@@ -55,7 +55,7 @@ session_start();
 
 <body>
     <section id="header">
-        <a href="index.php"><img src="img/logo.png" class="logo" alt="" /></a>
+        <a href="index.php"><img src="<?php echo $s3_base; ?>img/logo.png" class="logo" alt="" /></a>
 
         <div>
             <ul id="navbar">
@@ -175,7 +175,7 @@ session_start();
             //     $img = str_replace("uploads/", "resized/", $img);
             // }
 
-            // <img src='product_images/$img' height='235px' width = '235px' alt='' />
+            // <img src='" . $s3_base . "product_images/$img' height='235px' width = '235px' alt='' />
             echo "
                     <div class='pro' onclick='topage($pid)'>
                       <img src='$img' height='235px' width='235px' alt=''  />
@@ -313,14 +313,14 @@ session_start();
         </div>
         <div class="col install">
             <p>Secured Payment Gateways</p>
-            <img src="img/pay/pay.png" />
+            <img src="<?php echo $s3_base; ?>img/pay/pay.png" />
         </div>
         <div class="copyright">
             <p>2021. byteBazaar. HTML CSS </p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="<?php echo $s3_base; ?>script.js"></script>
 </body>
 
 </html>

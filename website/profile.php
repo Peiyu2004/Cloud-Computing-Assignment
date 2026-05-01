@@ -1,5 +1,7 @@
 <?php
 session_start();
+include("include/connect.php");
+include("include/s3_config.php");
 
 
 if (isset($_GET['lo'])) {
@@ -10,7 +12,6 @@ if (isset($_GET['lo'])) {
 }
 
 if (isset($_POST['submit'])) {
-  include("include/connect.php");
   $aid = $_SESSION['aid'];
 
   $firstname = $_POST['a1'];
@@ -41,7 +42,7 @@ if (isset($_POST['submit'])) {
     exit();
   }
 
-  $query = "UPDATE ACCOUNTS SET afname = '$firstname', alname='$lastname', email='$email', phone='$phone', cnic='$cnic', dob='$dob' WHERE aid = $aid";
+  $query = "UPDATE accounts SET afname = '$firstname', alname='$lastname', email='$email', phone='$phone', cnic='$cnic', dob='$dob' WHERE aid = $aid";
 
   $result = mysqli_query($con, $query);
   header("Location: profile.php");
@@ -96,7 +97,7 @@ if (isset($_GET['c'])) {
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="<?php echo $s3_base; ?>style.css" />
 
     <style>
     .tb {
@@ -209,7 +210,7 @@ if (isset($_GET['c'])) {
 
 <body>
     <section id="header">
-        <a href="index.php"><img src="img/logo.png" class="logo" alt="" /></a>
+        <a href="index.php"><img src="<?php echo $s3_base; ?>img/logo.png" class="logo" alt="" /></a>
 
         <div>
             <ul id="navbar">
@@ -260,7 +261,7 @@ if (isset($_GET['c'])) {
       include("include/connect.php");
 
       $aid = $_SESSION['aid'];
-      $query = "SELECT * FROM ACCOUNTS WHERE aid = $aid";
+      $query = "SELECT * FROM accounts WHERE aid = $aid";
 
       $result = mysqli_query($con, $query);
 
@@ -326,7 +327,7 @@ if (isset($_GET['c'])) {
 
                 $aid = $_SESSION['aid'];
 
-                $query = "SELECT * FROM ACCOUNTS WHERE aid = $aid";
+                $query = "SELECT * FROM accounts WHERE aid = $aid";
 
                 $result = mysqli_query($con, $query);
 
@@ -387,7 +388,7 @@ if (isset($_GET['c'])) {
                 include("include/connect.php");
 
                 $aid = $_SESSION['aid'];
-                $query = "SELECT * FROM ACCOUNTS WHERE aid = $aid";
+                $query = "SELECT * FROM accounts WHERE aid = $aid";
 
                 $result = mysqli_query($con, $query);
 
@@ -481,7 +482,7 @@ if (isset($_GET['c'])) {
           include("include/connect.php");
 
           $pid = $row['pid'];
-          $query = "select * from products where pid = $pid";
+          $query = "select * from `products` where pid = $pid";
 
           $result2 = mysqli_query($con, $query);
 
@@ -493,7 +494,7 @@ if (isset($_GET['c'])) {
 
           echo " <tr>
                     <td>$pname</td>
-                    <td><img src='product_images/$img' width='50px' height='50px' alt='Product 1'></td>
+                    <td><img src='" . $s3_base . "product_images/$img' width='50px' height='50px' alt='Product 1'></td>
                     <td>$price</td>
                     <td><textarea name='$pid-te'> </textarea></td>
                     <td>
@@ -609,14 +610,14 @@ if (isset($_GET['c'])) {
             </div>
             <div class="col install">
                 <p>Secured Payment Gateways</p>
-                <img src="img/pay/pay.png" />
+                <img src="<?php echo $s3_base; ?>img/pay/pay.png" />
             </div>
             <div class="copyright">
                 <p>2021. byteBazaar. HTML CSS </p>
             </div>
         </footer>
 
-        <script src="script.js"></script>
+        <script src="<?php echo $s3_base; ?>script.js"></script>
 
         <script>
         // Get all the rating fields on the page
